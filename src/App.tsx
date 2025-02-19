@@ -87,6 +87,11 @@ const App: Component = () => {
             }}
           />
         </div>
+        <div>
+          <a href="https://github.com/EDVTAZ/measure-image" target="_blank">
+            Source code
+          </a>
+        </div>
       </div>
       <div class={styles.stats}>
         <Show when={imageDimensions().width > 0}>

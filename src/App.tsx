@@ -15,13 +15,11 @@ function percentFormat(percentage: number) {
 
 function formatPoint(
   pos: { x: number; y: number },
-  dims: { width: number; height: number; ratio: number }
+  dims: { width: number; height: number }
 ): string {
-  const x = Math.round(pos.x * dims.ratio);
-  const y = Math.round(pos.y * dims.ratio);
-  return `${x} ; ${y} // ${percentFormat(x / dims.width)} ; ${percentFormat(
-    y / dims.height
-  )}`;
+  return `${pos.x} ; ${pos.y} // ${percentFormat(
+    pos.x / dims.width
+  )} ; ${percentFormat(pos.y / dims.height)}`;
 }
 
 const App: Component = () => {
@@ -29,7 +27,6 @@ const App: Component = () => {
   const [imageDimensions, setImageDimensions] = createSignal({
     width: 0,
     height: 0,
-    ratio: 0,
   });
   const [pos, setPos] = createSignal({ x: 0, y: 0 });
   const [points, setPoints] = createSignal<{ x: number; y: number }[]>([]);
@@ -57,14 +54,17 @@ const App: Component = () => {
             class={styles.measuredImg}
             draggable="false"
             src={files()[0].source}
-            use:pointerPosition={(e) => {
-              setPos({ x: e.x, y: e.y });
+            use:pointerPosition={(pointer, target) => {
+              const ratio = imageDimensions().width / target.clientWidth;
+              setPos({
+                x: Math.round(pointer.x * ratio),
+                y: Math.round(pointer.y * ratio),
+              });
             }}
             on:load={(e) => {
               setImageDimensions({
                 width: e.target.naturalWidth,
                 height: e.target.naturalHeight,
-                ratio: e.target.naturalWidth / e.target.clientWidth,
               });
             }}
             on:click={() => {

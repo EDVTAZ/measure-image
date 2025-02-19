@@ -18,4 +18,6 @@
 
 .stats {
   padding: 0 1em;
+  text-wrap: nowrap;
+  width: 25em;
 }
